@@ -53,9 +53,10 @@ where:
 
 - $\mathbf{x}$ represents the complete image.
 - $\mathbb{R}$ denotes the set of real numbers.
+- $\mathbb{E}$ Belongs to/ Is an element of.
 - $N$ is the number of rows and columns in the square image.
 
-For this experiment, the image size is \(64\times64\). Therefore,
+For this experiment, the image size is $64 \times 64$. Therefore,
 
 $$
 \mathbf{x}\in\mathbb{R}^{64\times64}
