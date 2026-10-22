@@ -51,9 +51,9 @@ $$
 
 where:
 
-- \(\mathbf{x}\) represents the complete image.
-- \(\mathbb{R}\) denotes the set of real numbers.
-- \(N\) is the number of rows and columns in the square image.
+- $\mathbf{x}$ represents the complete image.
+- $\mathbb{R}$ denotes the set of real numbers.
+- $N$ is the number of rows and columns in the square image.
 
 For this experiment, the image size is \(64\times64\). Therefore,
 
