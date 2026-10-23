@@ -406,6 +406,94 @@ Therefore, $I_{\text{smooth}}(12,15)$ means:
 
 **Note:** This is a synthetic demonstration. Gaussian smoothing approximates blurring, but it does not by itself produce a physically calibrated astronomical image.
 
+## Normalisation
+
+After Gaussian smoothing, the image is normalised using:
+
+```python
+sky /= sky.max()
+```
+
+This operation divides every pixel value in the image by the largest pixel value.
+
+If the maximum brightness in the smoothed image is
+
+```math
+M = \max_{x,y} I_{\text{smooth}}(x,y)
+```
+
+then the normalised image is
+
+```math
+I_{\text{norm}}(x,y) = \frac{I_{\text{smooth}}(x,y)}{M}
+```
+
+As a result, the brightest pixel in the image becomes exactly 1:
+
+```math
+\max_{x,y} I_{\text{norm}}(x,y) = 1
+```
+
+All other pixel values are scaled proportionally and therefore satisfy
+
+```math
+0 \leq I_{\text{norm}}(x,y) \leq 1
+```
+
+---
+
+## Why Normalise?
+
+Normalisation ensures that pixel intensities lie within a consistent range, regardless of how the image was generated or smoothed.
+
+For example, suppose the peak brightness after Gaussian smoothing is
+
+```math
+M = 0.248
+```
+
+A pixel with brightness
+
+```math
+I_{\text{smooth}}(12,15) = 0.248
+```
+
+becomes
+
+```math
+I_{\text{norm}}(12,15) = \frac{0.248}{0.248} = 1
+```
+
+A neighbouring pixel with brightness
+
+```math
+I_{\text{smooth}}(13,15) = 0.124
+```
+
+becomes
+
+```math
+I_{\text{norm}}(13,15) = \frac{0.124}{0.248} = 0.5
+```
+
+The relative brightness structure of the image remains unchanged, but all values are rescaled into the interval $[0,1]$.
+
+---
+
+## Effect on the Synthetic Sky
+
+Before normalisation, Gaussian smoothing spreads the intensity of each point source over multiple neighbouring pixels. The brightest source may have a peak value below 1 because some of its intensity has been distributed to surrounding pixels.
+
+After normalisation:
+
+```math
+I_{\text{norm}}(x,y) = \frac{I_{\text{smooth}}(x,y)}{\max_{x,y} I_{\text{smooth}}(x,y)}
+```
+
+The brightest location in the image is restored to a value of 1, while all other pixels are scaled relative to that peak.
+
+This makes the synthetic sky easier to visualise, compare, and process in later stages of the reconstruction pipeline without changing its relative brightness structure.
+
 
 The inverse Fourier transform converts the frequency-domain representation back into an image:
 
