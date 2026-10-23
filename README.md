@@ -127,60 +127,82 @@ The sky begins as a collection of point sources. Each source is placed at a spec
 
 For example,
 
+$$
 I(12,15)=1.0
-means that the pixel at row 12 and column 15 has brightness 1.0.
+$$
+
+means that the pixel at row 12 and column 15 has brightness \(1.0\).
 
 Similarly,
 
+$$
 I(20,44)=0.8
-means that the pixel at row 20 and column 44 has brightness 0.8.
+$$
+
+means that the pixel at row 20 and column 44 has brightness \(0.8\).
+
+### Mathematical Representation
 
 Mathematically, the sky can be written as a sum of discrete point sources:
 
-I(x,y)
-=
-\sum_{k=1}^{8}
-a_k\,\delta(x-x_k,\,y-y_k)
+$$
+I(x,y)=\sum_{k=1}^{8}a_k\,\delta(x-x_k,y-y_k)
+$$
+
 where:
 
-$a_k$ is the brightness of the $k$-th source,
-$(x_k,y_k)$ is the location of the $k$-th source,
-$\delta$ is the discrete delta (impulse) function.
-For a single source located at $(12,15)$ with brightness $1.0$:
+- \(a_k\) is the brightness of the \(k\)-th source.
+- \((x_k,y_k)\) is the location of the \(k\)-th source.
+- \(\delta\) is the two-dimensional discrete delta (impulse) function.
 
-I(x,y)
-=
-1.0\,\delta(x-12,\;y-15)
-The minus signs do not indicate subtraction of brightness. They shift the delta function to the desired pixel location.
+### Example: A Single Point Source
+
+For a single source located at \((12,15)\) with brightness \(1.0\):
+
+$$
+I(x,y)=1.0\,\delta(x-12,y-15)
+$$
+
+The minus signs do not indicate subtraction of brightness. They specify the location at which the delta function is centred.
 
 The source is located where the arguments of the delta function are zero:
 
-x-12=0
-\quad\Rightarrow\quad
-x=12
+$$
+x-12=0 \quad\Rightarrow\quad x=12
+$$
+
 and
 
-y-15=0
-\quad\Rightarrow\quad
-y=15.
+$$
+y-15=0 \quad\Rightarrow\quad y=15
+$$
+
 Thus,
 
-\delta(x-12,\;y-15)
-represents a point source at pixel $(12,15)$.
+$$
+\delta(x-12,y-15)
+$$
 
-The complete synthetic sky is
+represents a point source at pixel \((12,15)\).
 
+### Complete Synthetic Sky
+
+The complete synthetic sky consists of eight point sources:
+
+$$
 \begin{aligned}
-I(x,y)
-={}&1.0\,\delta(x-12,y-15)
-+0.8\,\delta(x-20,y-44)\\
-&+0.7\,\delta(x-36,y-18)
-+0.9\,\delta(x-47,y-48)\\
-&+0.6\,\delta(x-29,y-32)
-+0.55\,\delta(x-51,y-12)\\
-&+0.65\,\delta(x-14,y-51)
-+0.75\,\delta(x-41,y-35).
+I(x,y)={}&1.0\,\delta(x-12,y-15)\\
+&+0.8\,\delta(x-20,y-44)\\
+&+0.7\,\delta(x-36,y-18)\\
+&+0.9\,\delta(x-47,y-48)\\
+&+0.6\,\delta(x-29,y-32)\\
+&+0.55\,\delta(x-51,y-12)\\
+&+0.65\,\delta(x-14,y-51)\\
+&+0.75\,\delta(x-41,y-35).
 \end{aligned}
+$$
+
+Each delta function places a source at its specified pixel location, while its coefficient determines the source's brightness.
 
 
 
