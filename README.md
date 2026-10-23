@@ -131,7 +131,7 @@ $$
 I(12,15)=1.0
 $$
 
-means that the pixel at row 12 and column 15 has brightness \(1.0\).
+means that the pixel at row 12 and column 15 has brightness $\(1.0\)$.
 
 Similarly,
 
@@ -139,7 +139,7 @@ $$
 I(20,44)=0.8
 $$
 
-means that the pixel at row 20 and column 44 has brightness \(0.8\).
+means that the pixel at row 20 and column 44 has brightness $\(0.8\)$.
 
 ### Mathematical Representation
 
