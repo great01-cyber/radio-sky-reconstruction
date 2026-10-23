@@ -832,15 +832,13 @@ where \(\hat{\mathbf{x}}\) is the reconstructed image.
 
 This method provides a simple baseline, but missing Fourier measurements can produce blurring and artefacts. The non-negativity operation is a basic constraint rather than a complete physical model of radio imaging.
 
-## 5. Reconstruction Methods
+<img src="results/first_reconstruction.png" alt="Radio sky reconstruction results" width="800">
 
 In the future, this project will compares three approaches:
 
 | Method | Description | Purpose |
 |---|---|---|
 | Zero-filled inverse FFT | Applies the inverse Fourier transform after filling missing measurements with zeros | Baseline |
-| FISTA with \(L_1\) regularisation | Optimises data fidelity and image sparsity | Optimisation-based reconstruction |
-| Plug-and-Play | Alternates measurement-consistency updates with denoising | Denoiser-based reconstruction |
 
 The methods will be evaluated using the same synthetic sky and measurement data for each experiment. This helps make comparisons fair and reproducible.
 
@@ -871,33 +869,12 @@ A lower MSE indicates smaller average squared pixel errors.
 The peak signal-to-noise ratio (PSNR) is derived from MSE:
 
 $$
-\mathrm{PSNR}
-=
-10\log_{10}
-\left(
-\frac{L^2}{\mathrm{MSE}}
-\right)
+\mathrm{PSNR} = 10\log_{10}\left(\frac{L^2}{\mathrm{MSE}}\right)
 $$
 
 where \(L\) is the maximum possible pixel value. For images normalised to the range \([0,1]\), \(L=1\).
 
 A higher PSNR generally indicates lower pixel-wise reconstruction error. PSNR should be interpreted alongside visual inspection and other metrics.
-
-### 6.4 Measurement Residual
-
-The data residual measures disagreement between the reconstructed image and the available measurements:
-
-$$
-R_{\mathrm{data}} = \|\mathcal{A}(\hat{\mathbf{x}})-\mathbf{y}\|_2
-$$
-
-A smaller residual indicates better agreement with the observed measurements, although the smallest residual does not necessarily correspond to the most accurate image when measurements are noisy.
-
-### 6.5 Convergence Behaviour
-
-The reconstruction error, objective value where applicable, and measurement residual can be recorded over iterations.
-
-These curves will help assess whether an algorithm stabilises and how quickly its reconstruction quality changes.
 
 ## 7. Experimental Design
 
