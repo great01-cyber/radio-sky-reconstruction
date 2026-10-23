@@ -262,15 +262,6 @@ sky = gaussian_filter(sky, sigma=0.8)
 A Gaussian kernel in two dimensions is defined as:
 
 $$
-G_{\sigma}(i,j)
-=
-\frac{1}{2\pi\sigma^2}
-\exp\left(
--\frac{i^2+j^2}{2\sigma^2}
-\right)
-$$
-
-$$
 G_\sigma(i,j) = \frac{1}{2\pi\sigma^2} \exp\left(-\frac{i^2+j^2}{2\sigma^2}\right)
 $$
 
