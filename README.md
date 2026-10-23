@@ -207,7 +207,7 @@ and
 y = 15
 ```
 
-Therefore, it represents a single bright pixel located at $\((12,15)\)$.
+Therefore, it represents a single bright pixel located at $(12,15)$.
 
 ### Complete Synthetic Sky
 
@@ -228,8 +228,34 @@ $$
 
 Each delta function places a source at its specified pixel location, while its coefficient determines the source's brightness.
 
+Our objective is to estimate $\mathbf{x}$ from incomplete and noisy Fourier measurements.
 
+Therefore, the general measurement model is:
 
+$$
+\boxed{
+\mathbf{y}
+=
+\mathbf{M}\odot\mathcal{F}(\mathbf{x})
++
+\mathbf{M}\odot\mathbf{n}
+}
+$$
+
+where:
+
+| Symbol | Meaning |
+|---|---|
+| $\mathbf{x}$ | Original sky image |
+| $\mathcal{F}$ | Two-dimensional Fourier transform |
+| $\mathbf{M}$ | Fourier sampling mask |
+| $\odot$ | Element-wise multiplication |
+| $\mathbf{n}$ | Simulated complex noise |
+| $\mathbf{y}$ | Incomplete, noisy Fourier measurements |
+
+This is the central equation behind the simulation.
+
+The rest of the project is about understanding this equation and finding a good estimate of $\mathbf{x}$ from $\mathbf{y}$.
 
 ### 4.2 The Fourier Transform
 
