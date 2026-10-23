@@ -187,7 +187,7 @@ represents a point source at pixel $\((12,15)\)$.
 
 ### Two Dimensions
 
-In this project use two-dimensional coordinates $\((x,y)\)$ to identify pixel locations.
+In this project, we use two-dimensional coordinates $(x,y)$ to identify pixel locations.
 
 A point source at row 12, column 15 is represented mathematically as:
 
