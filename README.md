@@ -408,6 +408,7 @@ Therefore, $I_{\text{smooth}}(12,15)$ means:
 
 ## Normalisation
 
+Normalisation ensures that pixel intensities lie within a consistent range, regardless of how the image was generated or smoothed.
 After Gaussian smoothing, the image is normalised using:
 
 ```python
@@ -439,12 +440,6 @@ All other pixel values are scaled proportionally and therefore satisfy
 ```math
 0 \leq I_{\text{norm}}(x,y) \leq 1
 ```
-
----
-
-## Normalisation
-
-Normalisation ensures that pixel intensities lie within a consistent range, regardless of how the image was generated or smoothed.
 
 For example, suppose the peak brightness after Gaussian smoothing is
 
