@@ -284,10 +284,7 @@ Smoothing spreads each bright pixel across neighbouring pixels, creating more re
 Finally, the image is normalised:
 
 $$
-\mathbf{x}
-=
-\frac{\mathbf{x}_s}
-{\displaystyle\max_{i,j} x_{s,ij}}
+\mathbf{x} = \frac{\mathbf{x}_s}{\displaystyle\max_{i,j} x_{s,ij}}
 $$
 
 This ensures that the maximum brightness is $1$.
