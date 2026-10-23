@@ -784,19 +784,16 @@ $$
 
 where:
 
-- \(y_{uv}\) is the observed Fourier measurement.
-- \(X_{uv}\) is the true Fourier coefficient.
-- \(M_{uv}\) is the sampling mask.
-- \(\sigma\) controls the noise amplitude.
-- \(n_{uv}\) is a complex-valued noise sample.
+- $y_{uv}$ is the observed Fourier measurement.
+- $X_{uv}$ is the true Fourier coefficient.
+- $M_{uv}$ is the sampling mask.
+- $\sigma$ controls the noise amplitude.
+- $n_{uv}$ is a complex-valued noise sample.
 
 The complete measurement model can also be written as:
 
 $$
-\mathbf{y}
-=
-\mathbf{M}\odot
-\left(\mathcal{F}(\mathbf{x})+\sigma\mathbf{n}\right)
+\mathbf{y} = \mathbf{M}\odot\left(\mathcal{F}(\mathbf{x})+\sigma\mathbf{n}\right)
 $$
 
 Here, \(\mathcal{F}\) denotes the two-dimensional Fourier transform and \(\odot\) denotes element-wise multiplication.
@@ -812,12 +809,7 @@ The first reconstruction method is the zero-filled inverse Fourier transform.
 Missing Fourier coefficients are treated as zero, and the inverse Fourier transform is applied:
 
 $$
-\mathbf{x}_{\mathrm{raw}}
-=
-\operatorname{Re}
-\left\{
-\mathcal{F}^{-1}(\mathbf{M}\odot\mathbf{y})
-\right\}
+\mathbf{x}_{\mathrm{raw}} = \operatorname{Re}\left\{\mathcal{F}^{-1}(\mathbf{M}\odot\mathbf{y})\right\}
 $$
 
 The real part is retained because the target image is real-valued.
