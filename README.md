@@ -13,18 +13,7 @@ The project is educational and research-oriented. It is not a complete radio tel
 
 ## 2. Research Question
 
-**How do different reconstruction algorithms perform when a radio telescope has only incomplete measurements of the sky?**
-
-A more specific version of the research question is:
-
-> How do optimisation-based and Plug-and-Play methods compare in reconstruction accuracy, data consistency, and convergence behaviour when recovering a synthetic radio-sky image from incomplete and noisy Fourier measurements?
-
-### Supporting Questions
-
-1. How accurately can a sky image be reconstructed when only a fraction of its Fourier measurements are available?
-2. How does the reconstruction quality of a simple zero-filled inverse Fourier transform compare with that of FISTA and Plug-and-Play (PnP) methods?
-3. How does the proportion of missing Fourier measurements affect reconstruction quality?
-4. How do the algorithms behave over successive iterations, and do their reconstruction errors stabilise?
+**How accurately can a synthetic sky image be reconstructed from incomplete and noisy Fourier measurements using a zero-filled inverse Fourier transform?**
 
 ## 3. Project Objectives
 
@@ -34,10 +23,6 @@ The main objectives are to:
 - Transform the image into the Fourier domain.
 - Simulate incomplete Fourier measurements and add noise.
 - Implement a zero-filled inverse Fourier transform as a baseline reconstruction method.
-- Implement FISTA with an \(L_1\) sparsity regularisation term.
-- Implement a Plug-and-Play reconstruction method using an image denoiser.
-- Evaluate the methods using quantitative metrics and visual comparisons.
-- Investigate the effects of sampling rate, noise level, and iteration count.
 
 ## 4. Mathematical Foundations
 
@@ -679,6 +664,100 @@ mask.mean()
 
 The final sampling fraction can exceed $0.30$ because the symmetry operation can add measurements. This is expected.
 
+## Mathematics of the Noise Model
+
+Your code creates complex Gaussian noise:
+
+```python
+noise = (
+    random_generator.normal(size=sky.shape)
+    + 1j * random_generator.normal(size=sky.shape)
+) / np.sqrt(2.0)
+```
+
+### 5.1 Define Complex Noise
+
+Each noise value is defined as:
+
+```math
+n_{uv} = \frac{a_{uv} + \mathrm{i}b_{uv}}{\sqrt{2}}
+```
+
+where the real and imaginary components are independent standard normal random variables:
+
+```math
+a_{uv}, b_{uv} \overset{\mathrm{iid}}{\sim} \mathcal{N}(0,1)
+```
+
+Here, $\mathcal{N}(0,1)$ denotes a normal distribution with mean zero and variance one. The symbol $\mathrm{i}$ is the imaginary unit, where $\mathrm{i}^2=-1$.
+
+The real and imaginary components of the noise each have a mean of zero:
+
+```math
+\mathbb{E}[\text{Re}(n_{uv})] = 0
+```
+
+```math
+\mathbb{E}[\text{Im}(n_{uv})] = 0
+```
+
+Their variances are both one-half:
+
+```math
+\text{Var}(\text{Re}(n_{uv})) = \frac{1}{2}
+```
+
+```math
+\text{Var}(\text{Im}(n_{uv})) = \frac{1}{2}
+```
+
+Consequently, the expected squared magnitude of the complex noise is one:
+
+```math
+\mathbb{E}[|n_{uv}|^2] = 1
+```
+
+This is called **unit-power complex Gaussian noise**.
+
+### 5.2 Scale the Noise
+
+The code adds noise to the Fourier measurements and applies the sampling mask:
+
+```math
+Y_{uv} = M_{uv}X_{uv} + M_{uv}\sigma n_{uv}
+```
+
+where:
+
+- $Y_{uv}$ is the observed Fourier measurement.
+- $M_{uv}$ is the binary sampling mask.
+- $X_{uv}$ is the clean Fourier coefficient.
+- $\sigma$ is the noise scaling parameter.
+- $n_{uv}$ is the unit-power complex Gaussian noise.
+
+In your experiment, `noise_sigma` is set to `0.01`, so:
+
+```math
+\sigma = 0.01
+```
+
+The complete observation model is:
+
+```math
+\mathbf{Y} = \mathbf{M} \odot \left(\mathcal{F}(\mathbf{x}) + \sigma\mathbf{n}\right)
+```
+
+Here, $\mathcal{F}(\mathbf{x})$ denotes the Fourier transform of the image, and $\odot$ denotes element-wise multiplication.
+
+Because the mask multiplies both the signal and the noise, unselected Fourier positions contain zero. At selected positions, the standard deviation of each real and imaginary noise component is:
+
+```math
+\frac{\sigma}{\sqrt{2}}
+```
+
+For $\sigma = 0.01$, this is approximately $0.00707$ per component.
+
+
 ### 4.3 Incomplete Fourier Measurements
 
 In this project, not every Fourier coefficient is observed. A binary sampling mask is used to indicate which measurements are available:
@@ -753,82 +832,9 @@ where \(\hat{\mathbf{x}}\) is the reconstructed image.
 
 This method provides a simple baseline, but missing Fourier measurements can produce blurring and artefacts. The non-negativity operation is a basic constraint rather than a complete physical model of radio imaging.
 
-### 4.5 FISTA with \(L_1\) Sparsity
-
-The Fast Iterative Shrinkage-Thresholding Algorithm (FISTA) is an optimisation method that can be used to reconstruct an image from incomplete measurements.
-
-Define the forward measurement operator as:
-
-$$
-\mathcal{A}(\mathbf{x})
-=
-\mathbf{M}\odot\mathcal{F}(\mathbf{x})
-$$
-
-A sparse reconstruction can be formulated as:
-
-$$
-\min_{\mathbf{x}\geq0}
-\frac{1}{2}
-\left\|
-\mathcal{A}(\mathbf{x})-\mathbf{y}
-\right\|_2^2
-+
-\lambda\|\mathbf{x}\|_1
-$$
-
-where:
-
-- The first term measures disagreement between predicted and observed measurements.
-- The \(L_1\) norm encourages sparsity in the reconstructed image.
-- \(\lambda\) controls the trade-off between data fidelity and sparsity.
-- The non-negativity constraint requires the reconstructed brightness values to be non-negative.
-
-The \(L_1\) norm is defined as:
-
-$$
-\|\mathbf{x}\|_1
-=
-\sum_{i,j}|x_{ij}|
-$$
-
-FISTA alternates gradient-based updates with a thresholding operation and uses momentum to accelerate convergence.
-
-For the standard convex objective, FISTA has an \(O(1/k^2)\) convergence rate in objective value under the usual assumptions, where \(k\) is the iteration count. This guarantee depends on the optimisation formulation and does not automatically apply to every modified implementation.
-
-### 4.6 Plug-and-Play Reconstruction
-
-Plug-and-Play (PnP) reconstruction combines a measurement-consistency update with an image denoiser.
-
-A simplified measurement-consistency step is:
-
-The gradient update step is:
-
-```math
-z^{(k+1)} = x^{(k)} - \eta A^* \left( A(x^{(k)}) - y \right)
-```
-
-The denoising step is:
-
-```math
-x^{(k+1)} = D_{\sigma_d} \left( z^{(k+1)} \right)
-```
-
-where:
-
-- \(k\) is the iteration index.
-- \(\eta\) is the step size.
-- \(\mathcal{A}^{*}\) is the adjoint of the measurement operator.
-- \(D_{\sigma_d}\) is a denoising operator.
-- \(\sigma_d\) controls the denoising strength.
-
-The denoiser introduces an image prior into the reconstruction process. For the initial experiment, a Gaussian filter can be used as a simple denoiser. This is not a trained neural network.
-
-PnP methods do not automatically inherit FISTA's convergence guarantees. Their behaviour depends on the measurement update, denoiser, step size, and other assumptions.
-
 ## 5. Reconstruction Methods
 
-The project compares three approaches:
+In the future, this project will compares three approaches:
 
 | Method | Description | Purpose |
 |---|---|---|
