@@ -471,27 +471,17 @@ Plug-and-Play (PnP) reconstruction combines a measurement-consistency update wit
 
 A simplified measurement-consistency step is:
 
-$$
-\mathbf{z}^{(k+1)}
-=
-\mathbf{x}^{(k)}
--
-\eta\mathcal{A}^{*}
-\left(
-\mathcal{A}(\mathbf{x}^{(k)})-\mathbf{y}
-\right)
-$$
+The gradient update step is:
+
+```math
+z^{(k+1)} = x^{(k)} - \eta A^* \left( A(x^{(k)}) - y \right)
+```
 
 The denoising step is:
 
-$$
-\mathbf{x}^{(k+1)}
-=
-D_{\sigma_d}
-\left(
-\mathbf{z}^{(k+1)}
-\right)
-$$
+```math
+x^{(k+1)} = D_{\sigma_d} \left( z^{(k+1)} \right)
+```
 
 where:
 
