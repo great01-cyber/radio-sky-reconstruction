@@ -157,7 +157,7 @@ where:
 
 ### Example: A Single Point Source
 
-For a single source located at \((12,15)\) with brightness \(1.0\):
+For a single source located at $\((12,15)\)$ with brightness $\(1.0\)$:
 
 $$
 I(x,y)=1.0\,\delta(x-12,y-15)
@@ -183,11 +183,11 @@ $$
 \delta(x-12,y-15)
 $$
 
-represents a point source at pixel \((12,15)\).
+represents a point source at pixel $\((12,15)\)$.
 
 ### Two Dimensions
 
-In this project use two-dimensional coordinates \((x,y)\) to identify pixel locations.
+In this project use two-dimensional coordinates $\((x,y)\)$ to identify pixel locations.
 
 A point source at row 12, column 15 is represented mathematically as:
 
@@ -207,7 +207,7 @@ and
 y = 15
 ```
 
-Therefore, it represents a single bright pixel located at \((12,15)\).
+Therefore, it represents a single bright pixel located at $\((12,15)\)$.
 
 ### Complete Synthetic Sky
 
