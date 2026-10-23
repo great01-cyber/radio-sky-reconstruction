@@ -123,6 +123,66 @@ $$
 
 where $\delta$ is the Kronecker delta, which ensures that each source contributes brightness only at its assigned pixel location.
 
+The sky begins as a collection of point sources. Each source is placed at a specific pixel location and assigned a brightness value.
+
+For example,
+
+I(12,15)=1.0
+means that the pixel at row 12 and column 15 has brightness 1.0.
+
+Similarly,
+
+I(20,44)=0.8
+means that the pixel at row 20 and column 44 has brightness 0.8.
+
+Mathematically, the sky can be written as a sum of discrete point sources:
+
+I(x,y)
+=
+\sum_{k=1}^{8}
+a_k\,\delta(x-x_k,\,y-y_k)
+where:
+
+$a_k$ is the brightness of the $k$-th source,
+$(x_k,y_k)$ is the location of the $k$-th source,
+$\delta$ is the discrete delta (impulse) function.
+For a single source located at $(12,15)$ with brightness $1.0$:
+
+I(x,y)
+=
+1.0\,\delta(x-12,\;y-15)
+The minus signs do not indicate subtraction of brightness. They shift the delta function to the desired pixel location.
+
+The source is located where the arguments of the delta function are zero:
+
+x-12=0
+\quad\Rightarrow\quad
+x=12
+and
+
+y-15=0
+\quad\Rightarrow\quad
+y=15.
+Thus,
+
+\delta(x-12,\;y-15)
+represents a point source at pixel $(12,15)$.
+
+The complete synthetic sky is
+
+\begin{aligned}
+I(x,y)
+={}&1.0\,\delta(x-12,y-15)
++0.8\,\delta(x-20,y-44)\\
+&+0.7\,\delta(x-36,y-18)
++0.9\,\delta(x-47,y-48)\\
+&+0.6\,\delta(x-29,y-32)
++0.55\,\delta(x-51,y-12)\\
+&+0.65\,\delta(x-14,y-51)
++0.75\,\delta(x-41,y-35).
+\end{aligned}
+
+
 
 ### 4.2 The Fourier Transform
 
