@@ -270,6 +270,10 @@ G_{\sigma}(i,j)
 \right)
 $$
 
+$$
+G_\sigma(i,j) = \frac{1}{2\pi\sigma^2} \exp\left(-\frac{i^2+j^2}{2\sigma^2}\right)
+$$
+
 where $\sigma$ controls the width of the smoothing.
 
 The smoothed image is approximately the convolution of the original image with the Gaussian kernel:
