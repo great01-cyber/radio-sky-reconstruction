@@ -151,9 +151,9 @@ $$
 
 where:
 
-- \(a_k\) is the brightness of the \(k\)-th source.
-- \((x_k,y_k)\) is the location of the \(k\)-th source.
-- \(\delta\) is the two-dimensional discrete delta (impulse) function.
+- $a_k$ is the brightness of the $k$-th source.
+- $(x_k, y_k)$ is the location of the $k$-th source.
+- $\delta$ is the two-dimensional discrete delta (impulse) function.
 
 ### Example: A Single Point Source
 
