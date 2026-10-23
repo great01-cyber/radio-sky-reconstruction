@@ -185,6 +185,30 @@ $$
 
 represents a point source at pixel \((12,15)\).
 
+### Two Dimensions
+
+In this project use two-dimensional coordinates \((x,y)\) to identify pixel locations.
+
+A point source at row 12, column 15 is represented mathematically as:
+
+```math
+\delta(x - 12, y - 15)
+```
+
+This function is non-zero only when:
+
+```math
+x = 12
+```
+
+and
+
+```math
+y = 15
+```
+
+Therefore, it represents a single bright pixel located at \((12,15)\).
+
 ### Complete Synthetic Sky
 
 The complete synthetic sky consists of eight point sources:
@@ -203,6 +227,7 @@ I(x,y)={}&1.0\,\delta(x-12,y-15)\\
 $$
 
 Each delta function places a source at its specified pixel location, while its coefficient determines the source's brightness.
+
 
 
 
