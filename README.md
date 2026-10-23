@@ -251,6 +251,54 @@ This is the central equation behind the simulation.
 
 The rest of the project is about understanding this equation and finding a good estimate of $\mathbf{x}$ from $\mathbf{y}$.
 
+### 2.3 Smooth the Sources with a Gaussian Filter
+
+Your code then applies:
+
+```python
+sky = gaussian_filter(sky, sigma=0.8)
+```
+
+A Gaussian kernel in two dimensions is defined as:
+
+$$
+G_{\sigma}(i,j)
+=
+\frac{1}{2\pi\sigma^2}
+\exp\left(
+-\frac{i^2+j^2}{2\sigma^2}
+\right)
+$$
+
+where $\sigma$ controls the width of the smoothing.
+
+The smoothed image is approximately the convolution of the original image with the Gaussian kernel:
+
+$$
+\mathbf{x}_s = \mathbf{x}_0 * G_{\sigma}
+$$
+
+where:
+
+- $\ast$ denotes convolution.
+- $\mathbf{x}_0$ is the original point-source image.
+- $\mathbf{x}_s$ is the smoothed image.
+
+Smoothing spreads each bright pixel across neighbouring pixels, creating more realistic-looking compact sources for this demonstration.
+
+Finally, the image is normalised:
+
+$$
+\mathbf{x}
+=
+\frac{\mathbf{x}_s}
+{\displaystyle\max_{i,j} x_{s,ij}}
+$$
+
+This ensures that the maximum brightness is $1$.
+
+**Note:** This is a synthetic test image, not a physically calibrated astronomical sky.
+
 ### 4.2 The Fourier Transform
 
 The Fourier transform expresses an image in terms of spatial frequencies. These frequencies describe how image brightness varies across space.
