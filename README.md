@@ -7,7 +7,7 @@ Radio Sky Reconstruction is a small computational imaging project that explores 
 
 In radio astronomy, telescopes do not always obtain a complete set of measurements needed to directly recover an image. Reconstruction algorithms are therefore used to estimate the original sky image from the available data.
 
-This project uses a **synthetic radio-sky image** to demonstrate the basic principles behind this problem. It begins with a simple reconstruction method and will be extended to compare more advanced optimisation-based and Plug-and-Play methods.
+As this is my first time doing this, I decided to keep things simple by using **synthetic radio-sky image** to demonstrate the basic principles behind this problem. It begins with a simple reconstruction method and will be extended to compare more advanced optimisation-based and Plug-and-Play methods.
 
 The project is educational and research-oriented. It is not a complete radio telescope simulator and does not model the full physics or measurement process of a real radio interferometer.
 
@@ -851,13 +851,7 @@ The methods will be evaluated using the same synthetic sky and measurement data 
 The relative \(L_2\) reconstruction error compares the reconstructed image with the ground-truth image:
 
 $$
-E_{\mathrm{rel}}
-=
-\frac{
-\|\hat{\mathbf{x}}-\mathbf{x}\|_2
-}{
-\|\mathbf{x}\|_2
-}
+E_{rel} = \frac{||\hat{x} - x||_2}{||x||_2}
 $$
 
 A smaller value indicates that the reconstructed image is closer to the ground truth in relative \(L_2\) error.
@@ -867,12 +861,7 @@ A smaller value indicates that the reconstructed image is closer to the ground t
 The mean squared error (MSE) measures the average squared difference between corresponding pixels:
 
 $$
-\mathrm{MSE}
-=
-\frac{1}{N^2}
-\sum_{i=0}^{N-1}
-\sum_{j=0}^{N-1}
-(\hat{x}_{ij}-x_{ij})^2
+\mathrm{MSE} = \frac{1}{N^2}\sum_{i=0}^{N-1}\sum_{j=0}^{N-1}(\hat{x}_{ij}-x_{ij})^2
 $$
 
 A lower MSE indicates smaller average squared pixel errors.
@@ -899,9 +888,7 @@ A higher PSNR generally indicates lower pixel-wise reconstruction error. PSNR sh
 The data residual measures disagreement between the reconstructed image and the available measurements:
 
 $$
-R_{\mathrm{data}}
-=
-\|\mathcal{A}(\hat{\mathbf{x}})-\mathbf{y}\|_2
+R_{\mathrm{data}} = \|\mathcal{A}(\hat{\mathbf{x}})-\mathbf{y}\|_2
 $$
 
 A smaller residual indicates better agreement with the observed measurements, although the smallest residual does not necessarily correspond to the most accurate image when measurements are noisy.
@@ -916,25 +903,14 @@ These curves will help assess whether an algorithm stabilises and how quickly it
 
 The initial experiment uses the following settings:
 
-| Parameter | Initial setting |
+| Parameter | Setting |
 |---|---|
-| Image dimensions | \(64\times64\) pixels |
-| Target sampling fraction | \(30\%\) |
-| Fourier noise scale | \(\sigma=0.01\) |
-| Random seed | \(7\) |
-| Initial reconstruction method | Zero-filled inverse FFT |
-
-After the baseline has been tested, the experiment can be extended by changing one parameter at a time.
-
-Suggested experiments include:
-
-1. **Sampling fraction:** compare lower and higher proportions of observed Fourier coefficients.
-2. **Noise level:** investigate the effect of increasing measurement noise.
-3. **Regularisation strength:** assess how the choice of \(\lambda\) affects FISTA.
-4. **Denoising strength:** assess how \(\sigma_d\) affects PnP.
-5. **Iteration count:** compare reconstruction quality and stability over time.
-
-For a fair comparison, use fixed random seeds and the same ground-truth image, mask, and measurements when comparing reconstruction algorithms. Report any parameter tuning and avoid selecting settings solely because they perform well on one test image.
+| Image dimensions | 64 × 64 pixels |
+| Initial sampling probability | 30% |
+| Actual Fourier sampling fraction | 51.73% |
+| Fourier noise scale | σ = 0.01 |
+| Random seed | 7 |
+| Reconstruction method | Zero-filled inverse FFT |
 
 ## 8. Project Structure
 
