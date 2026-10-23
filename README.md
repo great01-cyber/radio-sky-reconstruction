@@ -291,6 +291,29 @@ This ensures that the maximum brightness is $1$.
 
 **Note:** This is a synthetic test image, not a physically calibrated astronomical sky.
 
+# Gaussian Smoothing and the Meaning of $I_{\text{smooth}}(12,15)$
+
+Initially, the synthetic sky is created using a collection of point sources. For example,
+
+$I(12,15) = 1.0$
+
+means that the pixel at row 12 and column 15 has brightness $1.0$, while most other pixels have brightness $0$.
+
+Mathematically, the unsmoothed sky can be represented as a sum of discrete point sources:
+
+$$I(x,y) = \sum_{k=1}^{N} a_k \, \delta(x-x_k, y-y_k),$$
+
+where:
+
+* $a_k$ is the brightness of the $k$-th source,
+* $(x_k, y_k)$ is the location of the $k$-th source,
+* $\delta$ is the discrete delta (impulse) function.
+
+These point sources are then blurred using a Gaussian filter:
+
+```python
+sky = gaussian_filter(sky, sigma=0.8)
+
 ### 4.2 The Fourier Transform
 
 The Fourier transform expresses an image in terms of spatial frequencies. These frequencies describe how image brightness varies across space.
