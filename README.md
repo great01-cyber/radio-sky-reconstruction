@@ -62,7 +62,7 @@ $$
 \mathbf{x}\in\mathbb{R}^{64\times64}
 $$
 
-The image contains \(64\times64=4096\) pixel values.
+The image contains $\(64\times64=4096\)$ pixel values.
 
 The brightness at an individual pixel is represented by:
 
