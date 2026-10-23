@@ -510,6 +510,92 @@ $$
 
 When all Fourier coefficients are available, the inverse transform can recover the original image, up to numerical precision. When measurements are missing, the problem becomes more difficult.
 
+4.2 The Fourier Transform
+
+The Fourier transform expresses an image in terms of spatial frequencies. These frequencies describe how image brightness varies across space.
+
+The two-dimensional discrete Fourier transform (DFT) is defined here using an orthonormal normalisation convention:
+
+$$
+X_{uv}=
+\frac{1}{N}
+\sum_{i=0}^{N-1}
+\sum_{j=0}^{N-1}
+x_{ij}
+\exp\left[
+-\frac{2\pi\mathrm{i}}{N}(ui+vj)
+\right]
+$$
+
+where:
+
+(x_{ij}) is the pixel brightness in the original image.
+
+(X_{uv}) is the Fourier coefficient at frequency coordinates ((u,v)).
+
+(N) is the image dimension.
+
+(\mathrm{i}=\sqrt{-1}) is the imaginary unit.
+
+(u) and (v) index the spatial frequencies.
+
+The Fourier coefficients are generally complex-valued. Each coefficient contains magnitude and phase information.
+
+In Python, this transformation is implemented using:
+
+def fft2(image):
+    return np.fft.fft2(image, norm="ortho")
+
+The inverse Fourier transform converts the frequency-domain representation back into an image:
+
+$$
+x_{ij}=
+\frac{1}{N}
+\sum_{u=0}^{N-1}
+\sum_{v=0}^{N-1}
+X_{uv}
+\exp\left[
+\frac{2\pi\mathrm{i}}{N}(ui+vj)
+\right]
+$$
+
+When all Fourier coefficients are available, the inverse transform can recover the original image, up to numerical precision. When measurements are missing, the problem becomes more difficult.
+
+## 4.2 The Fourier Transform
+
+The Fourier transform expresses an image in terms of spatial frequencies. These frequencies describe how image brightness varies across space.
+
+The two-dimensional discrete Fourier transform (DFT) is defined here using an orthonormal normalisation convention:
+
+```math
+X_{uv} = \frac{1}{N} \sum_{i=0}^{N-1} \sum_{j=0}^{N-1} x_{ij} \exp\left[-\frac{2\pi \mathrm{i}}{N}(ui+vj)\right]
+```
+
+where:
+
+- $x_{ij}$ is the pixel brightness in the original image.
+- $X_{uv}$ is the Fourier coefficient at frequency coordinates $(u,v)$.
+- $N$ is the image dimension, assuming a square $N \times N$ image.
+- $\mathrm{i}=\sqrt{-1}$ is the imaginary unit.
+- $u$ and $v$ index the spatial frequencies.
+
+The Fourier coefficients are generally complex-valued. Each coefficient contains magnitude and phase information.
+
+In Python, this transformation is implemented using:
+
+```python
+def fft2(image):
+    return np.fft.fft2(image, norm="ortho")
+```
+
+The inverse Fourier transform converts the frequency-domain representation back into an image:
+
+```math
+x_{ij} = \frac{1}{N} \sum_{u=0}^{N-1} \sum_{v=0}^{N-1} X_{uv} \exp\left[\frac{2\pi \mathrm{i}}{N}(ui+vj)\right]
+```
+
+When all Fourier coefficients are available, the inverse transform can recover the original image, up to numerical precision. When measurements are missing, the problem becomes more difficult.
+
 ### 4.3 Incomplete Fourier Measurements
 
 In this project, not every Fourier coefficient is observed. A binary sampling mask is used to indicate which measurements are available:
