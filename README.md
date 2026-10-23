@@ -507,6 +507,7 @@ where:
 - $N$ is the image dimension, assuming a square $N \times N$ image.
 - $\mathrm{i}=\sqrt{-1}$ is the imaginary unit.
 - $u$ and $v$ index the spatial frequencies.
+- $\(N\)$ is the image size.
 
 The Fourier coefficients are generally complex-valued. Each coefficient contains magnitude and phase information.
 
@@ -524,6 +525,159 @@ x_{ij} = \frac{1}{N} \sum_{u=0}^{N-1} \sum_{v=0}^{N-1} X_{uv} \exp\left[\frac{2\
 ```
 
 When all Fourier coefficients are available, the inverse transform can recover the original image, up to numerical precision. When measurements are missing, the problem becomes more difficult.
+
+### 3.2 What Does a Fourier Coefficient Contain?
+
+Each Fourier coefficient is generally a complex number:
+
+```math
+X_{uv} = a_{uv} + \mathrm{i}b_{uv}
+```
+
+where $a_{uv}$ is the real part and $b_{uv}$ is the imaginary part.
+
+It has a magnitude:
+
+```math
+|X_{uv}| = \sqrt{a_{uv}^{2} + b_{uv}^{2}}
+```
+
+and a phase:
+
+```math
+\phi_{uv} = \text{atan2}(b_{uv}, a_{uv})
+```
+
+Magnitude describes the strength of that frequency component, while phase describes its relative alignment and is essential for locating structures in the reconstructed image.
+
+Broad spatial patterns tend to contribute strongly to low spatial frequencies, while sharp features and fine details contribute to higher spatial frequencies.
+
+### 3.3 Why Use `norm="ortho"`?
+
+Orthonormal scaling gives the Fourier transform and its inverse consistent scaling:
+
+```math
+\mathcal{F}^{-1}\left(\mathcal{F}(\mathbf{x})\right) = \mathbf{x}
+```
+
+It also satisfies Parseval's identity:
+
+```math
+\sum_{i,j}|x_{ij}|^{2} = \sum_{u,v}|X_{uv}|^{2}
+```
+
+This means that the total squared magnitude is preserved by the transform.
+
+The code uses NumPy's Fast Fourier Transform (FFT) algorithm, which computes the discrete Fourier transform (DFT) efficiently.
+
+**The distinction:** The DFT is the mathematical transformation, while the FFT is an algorithm for computing it efficiently.
+
+## Mathematics of the Fourier Sampling Mask
+
+Your code creates a binary sampling mask:
+
+```python
+mask = random_generator.random((size, size)) < fraction
+mask[0, 0] = True
+```
+
+Each element of the mask is either zero or one:
+
+```math
+M_{uv} \in \{0,1\}
+```
+
+The random sampling rule is:
+
+```math
+M_{uv} =
+\begin{cases}
+1, & r_{uv} < p, \\
+0, & r_{uv} \geq p
+\end{cases}
+```
+
+where $r_{uv}$ is a uniformly distributed random number between 0 and 1, and $p$ is the requested sampling fraction.
+
+For this project:
+
+```math
+p = 0.30
+```
+
+Before the symmetry operation, each entry has probability $p$ of being selected. The expected number of selected entries is $pN^2$, apart from the forced selection at $(0,0)$.
+
+### 4.1 Apply the Mask to the Fourier Transform
+
+The observed clean measurements are:
+
+```math
+Y_{uv}^{\mathrm{clean}} = M_{uv}X_{uv}
+```
+
+If $M_{uv}=1$, the Fourier coefficient is retained. If $M_{uv}=0$, it is set to zero.
+
+This is the mathematical operation behind:
+
+```python
+clean_measurements = mask * fft2(sky)
+```
+
+The symbol $\odot$ is often used to denote element-wise multiplication. Therefore, the same operation can be written as:
+
+```math
+\mathbf{Y}^{\mathrm{clean}} = \mathbf{M} \odot \mathbf{X}
+```
+
+### 4.2 Conjugate Symmetry for Real-Valued Images
+
+For a real-valued image, its Fourier transform obeys conjugate symmetry:
+
+```math
+X_{(-u)\bmod N,\,(-v)\bmod N} = \overline{X_{uv}}
+```
+
+where the overline denotes complex conjugation.
+
+This means that coefficients at opposite frequency coordinates are complex conjugates of each other.
+
+Your code enforces matching symmetry in the sampling mask:
+
+```python
+negative_indices = (-np.arange(size)) % size
+
+mirrored = mask[np.ix_(negative_indices, negative_indices)]
+
+mask = mask | mirrored
+```
+
+Mathematically, this is equivalent to:
+
+```math
+M_{\mathrm{sym}} = M \lor M_{\mathrm{mirror}}
+```
+
+where $\lor$ denotes element-wise logical OR.
+
+The resulting mask is symmetric under the frequency-index mapping.
+
+**Important distinction:** A symmetric mask does not automatically guarantee that noisy measurements are conjugate-symmetric. This must also be considered when generating the noise. Additionally, this random mask is a simplified sampling model, not a realistic model of radio-interferometer baseline coverage.
+
+### 4.3 Calculate the Actual Sampling Fraction
+
+The final fraction of selected Fourier positions is:
+
+```math
+p_{\mathrm{actual}} = \frac{1}{N^2}\sum_{u=0}^{N-1}\sum_{v=0}^{N-1} M_{uv}
+```
+
+In Python:
+
+```python
+mask.mean()
+```
+
+The final sampling fraction can exceed $0.30$ because the symmetry operation can add measurements. This is expected.
 
 ### 4.3 Incomplete Fourier Measurements
 
