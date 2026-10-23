@@ -232,15 +232,7 @@ Our objective is to estimate $\mathbf{x}$ from incomplete and noisy Fourier meas
 
 Therefore, the general measurement model is:
 
-$$
-\boxed{
-\mathbf{y}
-=
-\mathbf{M}\odot\mathcal{F}(\mathbf{x})
-+
-\mathbf{M}\odot\mathbf{n}
-}
-$$
+\mathbf{y} = \mathbf{M} \odot \mathcal{F}(\mathbf{x}) + \mathbf{M} \odot \mathbf{n}
 
 where:
 
