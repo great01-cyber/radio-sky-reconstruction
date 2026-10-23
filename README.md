@@ -291,62 +291,121 @@ This ensures that the maximum brightness is $1$.
 
 **Note:** This is a synthetic test image, not a physically calibrated astronomical sky.
 
-# Gaussian Smoothing and the Meaning of $I_{\text{smooth}}(12,15)$
+## Gaussian Smoothing and the Meaning of $I_{\text{smooth}}(12,15)$
 
-Initially, the synthetic sky is created using a collection of point sources. For example,
+Initially, the synthetic sky is created using a collection of point sources. For example:
 
-$I(12,15) = 1.0$
+```math
+I(12,15) = 1.0
+```
 
-means that the pixel at row 12 and column 15 has brightness $1.0$, while most other pixels have brightness $0$.
+This means that the pixel at row 12 and column 15 has a brightness of 1.0, while most other pixels have a brightness of 0.
 
 Mathematically, the unsmoothed sky can be represented as a sum of discrete point sources:
 
-$$I(x,y) = \sum_{k=1}^{N} a_k \, \delta(x-x_k, y-y_k),$$
+```math
+I(x,y) = \sum_{k=1}^{8} a_k \, \delta(x-x_k, y-y_k)
+```
 
 where:
 
-* $a_k$ is the brightness of the $k$-th source,
-* $(x_k, y_k)$ is the location of the $k$-th source,
-* $\delta$ is the discrete delta (impulse) function.
+- $a_k$ is the brightness of the $k$-th source.
+- $(x_k,y_k)$ is the location of the $k$-th source.
+- $\delta$ is the two-dimensional discrete delta (impulse) function.
+
+### Applying the Gaussian Filter
 
 These point sources are then blurred using a Gaussian filter:
 
 ```python
 sky = gaussian_filter(sky, sigma=0.8)
-
-### 4.2 The Fourier Transform
-
-The Fourier transform expresses an image in terms of spatial frequencies. These frequencies describe how image brightness varies across space.
-
-The two-dimensional discrete Fourier transform (DFT) is defined here using an orthonormal normalisation convention:
-
-$$
-X_{uv}=
-\frac{1}{N}
-\sum_{i=0}^{N-1}
-\sum_{j=0}^{N-1}
-x_{ij}
-\exp\left[
--\frac{2\pi\mathrm{i}}{N}(ui+vj)
-\right]
-$$
-
-where:
-
-- \(x_{ij}\) is the pixel brightness in the original image.
-- \(X_{uv}\) is the Fourier coefficient at frequency coordinates \((u,v)\).
-- \(N\) is the image dimension.
-- \(\mathrm{i}=\sqrt{-1}\) is the imaginary unit.
-- \(u\) and \(v\) index the spatial frequencies.
-
-The Fourier coefficients are generally complex-valued. Each coefficient contains magnitude and phase information.
-
-In Python, this transformation is implemented using:
-
-```python
-def fft2(image):
-    return np.fft.fft2(image, norm="ortho")
 ```
+
+The two-dimensional Gaussian kernel is defined as:
+
+```math
+G_{\sigma}(x,y) = \frac{1}{2\pi\sigma^2}\exp\left(-\frac{x^2+y^2}{2\sigma^2}\right)
+```
+
+where $\sigma=0.8$ controls the width of the blur.
+
+The smoothing operation can be expressed as a convolution between the original image and the Gaussian kernel:
+
+```math
+I_{\text{smooth}}(x,y) = (I * G_{\sigma})(x,y)
+```
+
+In discrete form:
+
+```math
+I_{\text{smooth}}(m,n) = \sum_i \sum_j I(i,j)\,G_{\sigma}(m-i,n-j)
+```
+
+This means that the brightness at each output pixel is calculated by combining the brightness values of neighbouring input pixels, weighted according to the Gaussian kernel. Nearby pixels generally contribute more strongly than distant pixels.
+
+---
+
+### What Does $I_{\text{smooth}}(12,15)$ Mean?
+
+The notation
+
+```math
+I_{\text{smooth}}(12,15)
+```
+
+represents the brightness of the pixel at row 12 and column 15 **after Gaussian smoothing has been applied**.
+
+Before smoothing:
+
+```math
+I(12,15)=1.0
+```
+
+The source's brightness is concentrated in a single pixel.
+
+After smoothing, the brightness is distributed across neighbouring pixels. The value at the original source location is calculated as:
+
+```math
+I_{\text{smooth}}(12,15) = \sum_i \sum_j I(i,j)\,G_{\sigma}(12-i,15-j)
+```
+
+In other words, the filter considers the input pixels, weights their contributions using the Gaussian kernel, and combines them to produce the output pixel value.
+
+As a result:
+
+- The original bright pixel becomes less concentrated.
+- Neighbouring pixels receive non-zero brightness values.
+- The source appears as a compact, blurred spot rather than a single bright pixel.
+- The image resembles an astronomical image in which the instrument's point-spread function broadens the apparent source.
+
+### Conceptual Example
+
+Before smoothing, a simplified $3\times3$ image might look like this:
+
+```text
+0  0  0
+0  1  0
+0  0  0
+```
+
+After smoothing, the image might look conceptually like this:
+
+```text
+0.05  0.12  0.05
+0.12  0.32  0.12
+0.05  0.12  0.05
+```
+
+These numbers are illustrative only. They are not the exact output of a Gaussian filter with `sigma=0.8`. The actual values depend on the filter, the input image, and the treatment of image boundaries.
+
+The central pixel's brightness decreases as some of its intensity is distributed to neighbouring pixels.
+
+Therefore, $I_{\text{smooth}}(12,15)$ means:
+
+> The brightness value at row 12 and column 15 after Gaussian smoothing has spread the original point-source brightness across neighbouring pixels.
+
+**Note:** This is a synthetic demonstration. Gaussian smoothing approximates blurring, but it does not by itself produce a physically calibrated astronomical image.
+
 
 The inverse Fourier transform converts the frequency-domain representation back into an image:
 
