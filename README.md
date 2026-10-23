@@ -442,7 +442,7 @@ All other pixel values are scaled proportionally and therefore satisfy
 
 ---
 
-## Why Normalise?
+## Normalisation
 
 Normalisation ensures that pixel intensities lie within a consistent range, regardless of how the image was generated or smoothed.
 
