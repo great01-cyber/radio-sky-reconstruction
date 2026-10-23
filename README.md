@@ -66,15 +66,25 @@ The image contains $\(64\times64=4096\)$ pixel values.
 
 The image is represented as a matrix:
 
+The synthetic sky image is represented as a matrix:
+
+$$
+\mathbf{x}\in\mathbb{R}^{64\times64}
+$$
+
+More explicitly, the image matrix has the form:
+
 $$
 \mathbf{x}=
 \begin{bmatrix}
-x_{11} & x_{12} & x_{13}\\
-x_{21} & x_{22} & x_{23}\\
-x_{31} & x_{32} & x_{33}
+x_{11} & x_{12} & \cdots & x_{1,64}\\
+x_{21} & x_{22} & \cdots & x_{2,64}\\
+\vdots & \vdots & \ddots & \vdots\\
+x_{64,1} & x_{64,2} & \cdots & x_{64,64}
 \end{bmatrix}
-\in \mathbb{R}^{3\times3}
 $$
+
+Each $x_{ij}$ represents the brightness of a pixel at row $i$ and column $j$. The image contains $64\times64=4096$ pixel values.
 
 Each $x_{ij}$ represents the brightness of a pixel at row $i$ and column $j$.
 
