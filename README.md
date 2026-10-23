@@ -64,8 +64,6 @@ $$
 
 The image contains $\(64\times64=4096\)$ pixel values.
 
-The image is represented as a matrix:
-
 The synthetic sky image is represented as a matrix:
 
 $$
@@ -84,21 +82,47 @@ x_{64,1} & x_{64,2} & \cdots & x_{64,64}
 \end{bmatrix}
 $$
 
-Each $x_{ij}$ represents the brightness of a pixel at row $i$ and column $j$. The image contains $64\times64=4096$ pixel values.
-
-Each $x_{ij}$ represents the brightness of a pixel at row $i$ and column $j$.
-
 The brightness at an individual pixel is represented by:
 
 $$
 x_{ij}
 $$
 
+Each $x_{ij}$ represents the brightness of a pixel at row $i$ and column $j$. The image contains $64\times64=4096$ pixel values.
+
 where \(i\) is the row index and \(j\) is the column index.
 
-For example, \(x_{12}\) represents the brightness at row 1, column 2 using mathematical indexing.
+For example, $x_{12}$ represents the brightness of the pixel at row 1, column 2 using mathematical indexing.
 
 The synthetic image begins with a collection of point sources. Each source has a position and a brightness. The point sources are then smoothed using a Gaussian filter to create a simplified sky image.
+
+### Point Sources
+
+A point source is an idealised source of emission represented by a single location in an image. In this project, each point source is defined by its pixel coordinates and brightness.
+
+The collection of $K$ point sources is represented as
+
+$$
+\mathcal{S}=\{(i_k,j_k,a_k)\}_{k=1}^{K}
+$$
+
+where:
+
+- $K$ is the total number of point sources.
+- $i_k$ is the row coordinate of source $k$.
+- $j_k$ is the column coordinate of source $k$.
+- $a_k$ is the brightness assigned to source $k$.
+
+For this experiment, $K=8$. The sources are placed at predefined locations with different brightness values to create a sparse synthetic sky.
+
+The initial sky image is constructed using
+
+$$
+x_{ij}=\sum_{k=1}^{K}a_k\delta_{i,i_k}\delta_{j,j_k}
+$$
+
+where $\delta$ is the Kronecker delta, which ensures that each source contributes brightness only at its assigned pixel location.
+
 
 ### 4.2 The Fourier Transform
 
