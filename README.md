@@ -64,6 +64,20 @@ $$
 
 The image contains $\(64\times64=4096\)$ pixel values.
 
+The image is represented as a matrix:
+
+$$
+\mathbf{x}=
+\begin{bmatrix}
+x_{11} & x_{12} & x_{13}\\
+x_{21} & x_{22} & x_{23}\\
+x_{31} & x_{32} & x_{33}
+\end{bmatrix}
+\in \mathbb{R}^{3\times3}
+$$
+
+Each $x_{ij}$ represents the brightness of a pixel at row $i$ and column $j$.
+
 The brightness at an individual pixel is represented by:
 
 $$
