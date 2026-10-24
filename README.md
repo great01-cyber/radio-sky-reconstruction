@@ -33,6 +33,10 @@ The main objectives are to:
 - Implement a zero-filled inverse Fourier transform as a baseline reconstruction method.
 - Calculate accuracy of the reconstruction.
 
+
+## 4. Methodology
+<img src="results/Radio_Sky_Reconstruction_Workflow.png" alt="Radio sky reconstruction results" width="800">
+
 ## 4. Mathematical Foundations
 
 ### 4.1 Representing the Sky Image
