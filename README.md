@@ -809,7 +809,7 @@ The first reconstruction method is the zero-filled inverse Fourier transform.
 Missing Fourier coefficients are treated as zero, and the inverse Fourier transform is applied:
 
 $$
-\mathbf{x}_{\mathrm{raw}} = \operatorname{Re}\left\{\mathcal{F}^{-1}(\mathbf{M}\odot\mathbf{y})\right\}
+\mathbf{x}_{\mathrm{raw}} = \mathrm{Re}\{\mathcal{F}^{-1}(\mathbf{M}\odot\mathbf{y})\}
 $$
 
 The real part is retained because the target image is real-valued.
@@ -877,9 +877,12 @@ The initial experiment uses the following settings:
 | Image dimensions | 64 × 64 pixels |
 | Initial sampling probability | 30% |
 | Actual Fourier sampling fraction | 51.73% |
-| Fourier noise scale | σ = 0.01 |
+| Fourier noise scale | $\sigma = 0.01$ |
 | Random seed | 7 |
 | Reconstruction method | Zero-filled inverse FFT |
+| Relative reconstruction error | 0.6101 |
+| Mean Squared Error (MSE) | 0.000844 |
+| Peak Signal-to-Noise Ratio (PSNR) | 30.73 dB |
 
 ## 8. Project Structure
 
