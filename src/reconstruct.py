@@ -100,10 +100,16 @@ def main():
         np.linalg.norm(reconstruction - sky)
         / np.linalg.norm(sky)
     )
+    mse = np.mean((reconstruction - sky) ** 2)
+
+    psnr = 10 * np.log10(1.0 / mse)
+
 
     print(f"Image size: {SIZE} x {SIZE}")
     print(f"Sampling fraction: {mask.mean():.2%}")
     print(f"Relative reconstruction error: {relative_error:.4f}")
+    print(f"Mean Squared Error (MSE): {mse:.6f}")
+    print(f"Peak Signal-to-Noise Ratio (PSNR): {psnr:.2f} dB")
 
     # Plot the sky, mask and reconstruction.
     fig, axes = plt.subplots(1, 3, figsize=(12, 4))
