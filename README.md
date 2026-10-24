@@ -35,7 +35,7 @@ The main objectives are to:
 
 
 ## 4. Methodology
-<img src="results/Radio_Sky_Reconstruction_Workflow.png" alt="Radio sky reconstruction results" width="800">
+<img src="results/Radio_Sky_Reconstruction_Workflow.png" alt="Radio sky reconstruction" width="800">
 
 ## 4. Mathematical Foundations
 
