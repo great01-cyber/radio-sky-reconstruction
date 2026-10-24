@@ -15,13 +15,11 @@ in this project, a synthetic ground-truth sky image of size $64 \times 64$ pixel
 
 The reconstruction was obtained by applying a zero-filled inverse Fourier transform to the sampled measurements. The real component of the resulting image was retained, and negative pixel values were clipped to zero to enforce non-negativity. Reconstruction quality was evaluated by comparing the reconstructed image, $\hat{\mathbf{x}}$, with the original ground-truth image, $\mathbf{x}$, using relative reconstruction error, mean squared error (MSE), and peak signal-to-noise ratio (PSNR).
 
-The experiment retained $51.73%$ of the Fourier measurements after enforcing conjugate symmetry and produced a relative reconstruction error of $0.6101$, an MSE of $0.000844$, and a PSNR of $30.73,\mathrm{dB}$. These results demonstrate a complete synthetic reconstruction pipeline, from image generation and Fourier-domain measurement simulation to image recovery and quantitative evaluation. The experiment provides a baseline for understanding the limitations of zero-filled inverse Fourier reconstruction under incomplete and noisy sampling. However, the results are limited to a single synthetic image, a fixed sampling configuration, and one noise realisation. They do not establish performance across real radio astronomical observations.
+The experiment retained $51.73%$ of the Fourier measurements after enforcing conjugate symmetry and produced a relative reconstruction error of $0.6101$, an MSE of $0.000844$, and a PSNR of $30.73,\mathrm{dB}$. These results demonstrate a complete synthetic reconstruction pipeline, from image generation and Fourier-domain measurement simulation to image recovery and quantitative evaluation. 
 
 As this is my first time working on an image reconstruction, I decided to keep things simple and reproducible by using **synthetic radio-sky image** to demonstrate the basic principles behind this problem. 
 
-The project is educational and research-oriented. It is not a complete radio telescope simulator and does not model the full physics or measurement process of a real radio interferometer.
-
-## 2. Research Question
+## 2. Research Question(This RQ was formulated, to guide the project)
 
 **How accurately can a synthetic sky image be reconstructed from incomplete and noisy Fourier measurements using a zero-filled inverse Fourier transform?**
 
@@ -33,6 +31,7 @@ The main objectives are to:
 - Transform the image into the Fourier domain.
 - Simulate incomplete Fourier measurements and add noise.
 - Implement a zero-filled inverse Fourier transform as a baseline reconstruction method.
+- Calculate accuracy of the reconstruction.
 
 ## 4. Mathematical Foundations
 
