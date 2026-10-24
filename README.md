@@ -19,7 +19,7 @@ The experiment retained $51.73%$ of the Fourier measurements after enforcing con
 
 As this is my first time working on an image reconstruction, I decided to keep things simple and reproducible by using **synthetic radio-sky image** to demonstrate the basic principles behind this problem. 
 
-## 2. Research Question(This RQ was formulated, to guide the project)
+## 2. Research Question
 
 **How accurately can a synthetic sky image be reconstructed from incomplete and noisy Fourier measurements using a zero-filled inverse Fourier transform?**
 
@@ -37,9 +37,9 @@ The main objectives are to:
 ## 4. Methodology
 <img src="results/Radio_Sky_Reconstruction_Workflow.png" alt="Radio sky reconstruction" width="800">
 
-## 4. Mathematical Foundations
+## 5. Mathematical Foundations
 
-### 4.1 Representing the Sky Image
+### Representing the Sky Image
 
 The synthetic sky is represented as a two-dimensional matrix:
 
@@ -155,7 +155,7 @@ where:
 
 ### Example: A Single Point Source
 
-For a single source located at $\((12,15)\)$ with brightness $\(1.0\)$:
+For a single source located at $\(12,15)\$ with brightness $\(1.0\)$:
 
 $$
 I(x,y)=1.0\,\delta(x-12,y-15)
@@ -247,11 +247,9 @@ where:
 
 This is the central equation behind the simulation.
 
-The rest of the project is about understanding this equation and finding a good estimate of $\mathbf{x}$ from $\mathbf{y}$.
+### Smooth the Sources with a Gaussian Filter
 
-### 2.3 Smooth the Sources with a Gaussian Filter
-
-Your code then applies:
+The code then applies:
 
 ```python
 sky = gaussian_filter(sky, sigma=0.8)
@@ -286,8 +284,6 @@ $$
 $$
 
 This ensures that the maximum brightness is $1$.
-
-**Note:** This is a synthetic test image, not a physically calibrated astronomical sky.
 
 ## Gaussian Smoothing and the Meaning of $I_{\text{smooth}}(12,15)$
 
@@ -471,24 +467,8 @@ I_{\text{norm}}(13,15) = \frac{0.124}{0.248} = 0.5
 
 The relative brightness structure of the image remains unchanged, but all values are rescaled into the interval $[0,1]$.
 
----
 
-## Effect on the Synthetic Sky
-
-Before normalisation, Gaussian smoothing spreads the intensity of each point source over multiple neighbouring pixels. The brightest source may have a peak value below 1 because some of its intensity has been distributed to surrounding pixels.
-
-After normalisation:
-
-```math
-I_{\text{norm}}(x,y) = \frac{I_{\text{smooth}}(x,y)}{\max_{x,y} I_{\text{smooth}}(x,y)}
-```
-
-The brightest location in the image is restored to a value of 1, while all other pixels are scaled relative to that peak.
-
-This makes the synthetic sky easier to visualise, compare, and process in later stages of the reconstruction pipeline without changing its relative brightness structure.
-
-
-## 4.2 The Fourier Transform
+## The Fourier Transform
 
 The Fourier transform expresses an image in terms of spatial frequencies. These frequencies describe how image brightness varies across space.
 
@@ -550,7 +530,7 @@ Magnitude describes the strength of that frequency component, while phase descri
 
 Broad spatial patterns tend to contribute strongly to low spatial frequencies, while sharp features and fine details contribute to higher spatial frequencies.
 
-### 3.3 Why Use `norm="ortho"`?
+### Why Use `norm="ortho"`?
 
 Orthonormal scaling gives the Fourier transform and its inverse consistent scaling:
 
@@ -572,7 +552,7 @@ The code uses NumPy's Fast Fourier Transform (FFT) algorithm, which computes the
 
 ## Mathematics of the Fourier Sampling Mask
 
-Your code creates a binary sampling mask:
+Code for a binary sampling mask:
 
 ```python
 mask = random_generator.random((size, size)) < fraction
@@ -605,7 +585,7 @@ p = 0.30
 
 Before the symmetry operation, each entry has probability $p$ of being selected. The expected number of selected entries is $pN^2$, apart from the forced selection at $(0,0)$.
 
-### 4.1 Apply the Mask to the Fourier Transform
+### Apply the Mask to the Fourier Transform
 
 The observed clean measurements are:
 
@@ -627,7 +607,7 @@ The symbol $\odot$ is often used to denote element-wise multiplication. Therefor
 \mathbf{Y}^{\mathrm{clean}} = \mathbf{M} \odot \mathbf{X}
 ```
 
-### 4.2 Conjugate Symmetry for Real-Valued Images
+### Conjugate Symmetry for Real-Valued Images
 
 For a real-valued image, its Fourier transform obeys conjugate symmetry:
 
@@ -639,7 +619,7 @@ where the overline denotes complex conjugation.
 
 This means that coefficients at opposite frequency coordinates are complex conjugates of each other.
 
-Your code enforces matching symmetry in the sampling mask:
+The code enforces matching symmetry in the sampling mask:
 
 ```python
 negative_indices = (-np.arange(size)) % size
@@ -679,7 +659,7 @@ The final sampling fraction can exceed $0.30$ because the symmetry operation can
 
 ## Mathematics of the Noise Model
 
-Your code creates complex Gaussian noise:
+This creates complex Gaussian noise:
 
 ```python
 noise = (
@@ -688,7 +668,7 @@ noise = (
 ) / np.sqrt(2.0)
 ```
 
-### 5.1 Define Complex Noise
+### Define Complex Noise
 
 Each noise value is defined as:
 
@@ -732,7 +712,7 @@ Consequently, the expected squared magnitude of the complex noise is one:
 
 This is called **unit-power complex Gaussian noise**.
 
-### 5.2 Scale the Noise
+### Scale the Noise
 
 The code adds noise to the Fourier measurements and applies the sampling mask:
 
@@ -748,7 +728,7 @@ where:
 - $\sigma$ is the noise scaling parameter.
 - $n_{uv}$ is the unit-power complex Gaussian noise.
 
-In your experiment, `noise_sigma` is set to `0.01`, so:
+In this experiment, `noise_sigma` is set to `0.01`, so:
 
 ```math
 \sigma = 0.01
@@ -771,7 +751,7 @@ Because the mask multiplies both the signal and the noise, unselected Fourier po
 For $\sigma = 0.01$, this is approximately $0.00707$ per component.
 
 
-### 4.3 Incomplete Fourier Measurements
+### Incomplete Fourier Measurements
 
 In this project, not every Fourier coefficient is observed. A binary sampling mask is used to indicate which measurements are available:
 
@@ -809,13 +789,13 @@ $$
 \mathbf{y} = \mathbf{M}\odot\left(\mathcal{F}(\mathbf{x})+\sigma\mathbf{n}\right)
 $$
 
-Here, \(\mathcal{F}\) denotes the two-dimensional Fourier transform and \(\odot\) denotes element-wise multiplication.
+Here, $(\mathcal{F}$) denotes the two-dimensional Fourier transform and $\(\odot\)$ denotes element-wise multiplication.
 
 A sampling fraction of approximately \(30\%\) is used as the initial target. The actual fraction may differ because the mask is adjusted to maintain conjugate symmetry for real-valued images.
 
 This random sampling strategy is a simplified educational model. It does not reproduce the baseline geometry, visibility sampling, or other instrumental effects of a real radio interferometer.
 
-### 4.4 Zero-Filled Inverse Fourier Reconstruction
+### 6.0 Zero-Filled Inverse Fourier Reconstruction
 
 The first reconstruction method is the zero-filled inverse Fourier transform.
 
@@ -1005,6 +985,11 @@ The following foundational works provide context for the methods used in this pr
 - Beck, A. and Teboulle, M. (2009). *A Fast Iterative Shrinkage-Thresholding Algorithm for Linear Inverse Problems.* SIAM Journal on Imaging Sciences, 2(1), 183–202.
 - Venkatakrishnan, S. V., Bouman, C. A. and Wohlberg, B. (2013). *Plug-and-Play Priors for Model Based Reconstruction.* IEEE Global Conference on Signal and Information Processing.
 - Fessler, J. A. (2010). *Model-Based Image Reconstruction for MRI.* IEEE Signal Processing Magazine, 27(4), 81–89.
+
+- Zhang, H., & Dong, B. (2020). A review on deep learning in medical image reconstruction. Journal of the Operational Research Society of China, 8, 311–340. 
+https://arxiv.org/abs/1906.10643
+
+
 
 These references provide background on accelerated proximal optimisation, Plug-and-Play priors, and model-based image reconstruction. They do not imply that the present simplified experiment reproduces the full methods or assumptions in those works.
 
