@@ -504,7 +504,7 @@ x_{ij} = \frac{1}{N} \sum_{u=0}^{N-1} \sum_{v=0}^{N-1} X_{uv} \exp\left[\frac{2\
 
 When all Fourier coefficients are available, the inverse transform can recover the original image, up to numerical precision. When measurements are missing, the problem becomes more difficult.
 
-### 3.2 What Does a Fourier Coefficient Contain?
+### What Does a Fourier Coefficient Contain?
 
 Each Fourier coefficient is generally a complex number:
 
@@ -793,11 +793,10 @@ Here, $(\mathcal{F}$) denotes the two-dimensional Fourier transform and $\(\odot
 
 A sampling fraction of approximately \(30\%\) is used as the initial target. The actual fraction may differ because the mask is adjusted to maintain conjugate symmetry for real-valued images.
 
-This random sampling strategy is a simplified educational model. It does not reproduce the baseline geometry, visibility sampling, or other instrumental effects of a real radio interferometer.
 
 ### 6.0 Zero-Filled Inverse Fourier Reconstruction
 
-The first reconstruction method is the zero-filled inverse Fourier transform.
+The reconstruction method used here, is the zero-filled inverse Fourier transform.
 
 Missing Fourier coefficients are treated as zero, and the inverse Fourier transform is applied:
 
@@ -813,13 +812,15 @@ $$
 \hat{x}_{ij}=\max(0,x_{\mathrm{raw},ij})
 $$
 
-where \(\hat{\mathbf{x}}\) is the reconstructed image.
+where $\(\hat{\mathbf{x}}\)$ is the reconstructed image.
 
 This method provides a simple baseline, but missing Fourier measurements can produce blurring and artefacts. The non-negativity operation is a basic constraint rather than a complete physical model of radio imaging.
 
 <img src="results/first_reconstruction.png" alt="Radio sky reconstruction results" width="800">
 
-In the future, this project will compares three approaches:
+Fig showing the ground truth image, fourier sampling mask and zero-filled reconstruction.
+
+In the future, this project will compares three approaches to Zero-filled inverse FFT:
 
 | Method | Description | Purpose |
 |---|---|---|
@@ -831,7 +832,7 @@ The methods will be evaluated using the same synthetic sky and measurement data 
 
 ### 6.1 Relative Reconstruction Error
 
-The relative \(L_2\) reconstruction error compares the reconstructed image with the ground-truth image:
+The relative $\(L_2\)$ reconstruction error compares the reconstructed image with the ground-truth image:
 
 $$
 E_{rel} = \frac{||\hat{x} - x||_2}{||x||_2}
@@ -953,32 +954,11 @@ This project is a simplified computational imaging experiment. Its limitations i
 - The sampling mask is randomly generated and does not represent realistic interferometer baseline coverage.
 - The noise model is simplified and does not capture all sources of instrumental or observational noise.
 - The initial reconstruction method is deliberately simple.
-- A Gaussian denoiser is only a starting point for PnP and does not represent a learned image prior.
 - Results on a single synthetic image cannot establish that a method will generalise to real radio astronomy data.
-- PnP convergence must be investigated rather than assumed.
+- I'm still nascent to image reconstruction
 
-These limitations will be documented when reporting results.
 
-## 12. Expected Outcomes
-
-The project aims to produce:
-
-- A reproducible synthetic reconstruction experiment.
-- A baseline reconstruction against which more advanced methods can be compared.
-- Implementations of FISTA and Plug-and-Play reconstruction.
-- Quantitative comparisons using reconstruction error, MSE, PSNR, and measurement residuals.
-- Plots showing the effect of sampling, noise, and iteration count.
-- A discussion of the trade-offs between data fidelity, sparsity, denoising, and convergence behaviour.
-
-The results will be used to assess the strengths and weaknesses of the tested methods under the specific experimental conditions, rather than to claim that one method is universally superior.
-
-## 13. Research Motivation
-
-Recovering images from incomplete measurements is a central challenge in computational imaging. The problem connects Fourier analysis, inverse problems, optimisation, regularisation, and prior-based reconstruction.
-
-This project provides a practical foundation for exploring those concepts in a controlled setting. It also creates an opportunity to investigate how reconstruction accuracy and algorithmic stability change when information is missing or measurements are noisy.
-
-## 14. Further Reading
+## 12. Further Reading
 
 The following foundational works provide context for the methods used in this project:
 
@@ -988,11 +968,4 @@ The following foundational works provide context for the methods used in this pr
 
 - Zhang, H., & Dong, B. (2020). A review on deep learning in medical image reconstruction. Journal of the Operational Research Society of China, 8, 311–340. 
 https://arxiv.org/abs/1906.10643
-
-
-
-These references provide background on accelerated proximal optimisation, Plug-and-Play priors, and model-based image reconstruction. They do not imply that the present simplified experiment reproduces the full methods or assumptions in those works.
-
 ---
-
-**Project status:** Initial synthetic sky generation, Fourier sampling, and zero-filled inverse FFT reconstruction are the first implementation stage. FISTA, Plug-and-Play, and systematic evaluation are planned extensions.
